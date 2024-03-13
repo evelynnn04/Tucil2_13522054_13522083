@@ -1,0 +1,2 @@
+https://www.geeksforgeeks.org/how-to-check-the-execution-time-of-python-script/
+https://medium.com/swlh/structures-in-python-ed199411b3e1
