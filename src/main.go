@@ -133,6 +133,7 @@ func general_iterate(n int, iterate int, count int, list []Point) []Point{
 	}
 }
 
+
 // print
 func printPoint(p Point) {
 	fmt.Println(p.x)
@@ -145,6 +146,13 @@ func printList(list []Point){
 	}
 }
 
+func print_result_points(list []Point, n int){
+	for i:=0; i < len(list); i++{
+		if(i%(n-1) == 0){
+			fmt.Println(list[i])
+		}
+	}
+}
 func main() {
 	// var p = Point{3, 4}
 	// printPoint(p)
@@ -182,9 +190,10 @@ func main() {
 	b = general_iterate(3,5,0,b)
 	printList(b)
 	fmt.Println("Hasil generalisasi kubik")
-	bb := []Point{Point{0,0},Point{2,4},Point{8,4},Point{10,0}}
+	bb := []Point{Point{0,0},Point{2,4},Point{4,2},Point{8,0}}
 	bb = general_iterate(4,4,0,bb)
 	printList(bb)
+	print_result_points(bb, 4)
 	// fmt.Println("General Beizer")
 	// fmt.Println("test connect")
 	// c := []Point{Point{1,1},Point{2,2},Point{3,3}}
