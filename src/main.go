@@ -153,6 +153,16 @@ func print_result_points(list []Point, n int){
 		}
 	}
 }
+
+func take_result_points(list []Point, n int) []Point{
+	result := []Point{}
+	for i:=0; i < len(list); i++{
+		if(i%(n-1) == 0){
+			result = append(result, list[i])
+		}
+	}
+	return result
+}
 func main() {
 	// var p = Point{3, 4}
 	// printPoint(p)
@@ -193,7 +203,10 @@ func main() {
 	bb := []Point{Point{0,0},Point{2,4},Point{4,2},Point{8,0}}
 	bb = general_iterate(4,4,0,bb)
 	printList(bb)
-	print_result_points(bb, 4)
+	// print_result_points(bb, 4)
+	fmt.Println("result points:")
+	hasil := take_result_points(bb, 4)
+	printList(hasil)
 	// fmt.Println("General Beizer")
 	// fmt.Println("test connect")
 	// c := []Point{Point{1,1},Point{2,2},Point{3,3}}
