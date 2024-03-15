@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Berzier Graphic</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="title">
+        <h1>Welcome to Berzier Graphic Generator!</h1>
+    </div>
+    <div class="container">
+        <div class="left-content">
+            <canvas id="cartesian-canvas" class="canvas"></canvas>
+        </div>
+        <div class="right-content">
+            <form action="input" method="POST">
+                <label>Number of point:</label><br>
+                <input type="text" id="number-of-point" required><br>
+                <label>Number of iterate:</label><br>
+                <input type="text" id="number-of-iterate" required><br>
+                <label>Input points here...</label><br>
+                <textarea type="text" id="point-input" required style="row: 4;"></textarea><br>
+                <button type="submit">Solve</button>
+            </form>
+        </div>     
+    </div>
+    <script src="script.js"></script> 
+    </body>
+</html>
