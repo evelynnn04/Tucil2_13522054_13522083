@@ -113,7 +113,7 @@ func connect(p1 []Point, p2 []Point) []Point {
 	}
 }
 
-func general_iterate(n int, iterate int, count int, list []Point) []Point {
+func General_iterate(n int, iterate int, count int, list []Point) []Point {
 	// n adalah banyak titik kontrol
 	// iterate adalah jumlah iterasi
 	// count adalah pencacah iterasi
@@ -131,7 +131,7 @@ func general_iterate(n int, iterate int, count int, list []Point) []Point {
 			temp = base_iterate(n, temp)
 			result = connect(result, temp)
 		}
-		return general_iterate(n, iterate, count+1, result)
+		return General_iterate(n, iterate, count+1, result)
 	}
 }
 
@@ -168,13 +168,17 @@ func take_result_points(list []Point, n int) []Point {
 // Input
 func InputPoint(pointN int) Point {
 	var px, py float64
+	// var err error
 	for {
 		fmt.Printf("Enter coordinates for p%d.x and p%d.y separated by space: ", pointN, pointN)
 		fmt.Scanf("%f %f\n", &px, &py)
+		// if err != nil{
+		// 	fmt.Println("Input error!")
+		// 	continue
+		// }
 		// _, err := fmt.Scanf(%f %f, &input)
 		// if err != nil {
 		// 	fmt.Println("Input error!", err)
-		// 	continue
 		// }
 
 		// coordinates := strings.Fields(input)
