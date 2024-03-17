@@ -83,10 +83,10 @@ kn = [[4.0, 2.0], [5.0, 2.0], [6.0, 1.5], [7.0, 1.0], [8, 0]]
 # print(gb)
 
 # bez = base_iterate(3,bez)
-bez = [[0,0],[4,4],[8,4],[12,0]]
+bez = [[238.0, 680.0], [312.8, 0.0], [374.0, 0.0], [442.0, 680.0]]
 
 start_time = time.time()
-bez = general_iterate(4,5,0,bez)
+bez = general_iterate(4,4,0,bez)
 end_time = time.time()
 t = end_time - start_time
 print(bez)
