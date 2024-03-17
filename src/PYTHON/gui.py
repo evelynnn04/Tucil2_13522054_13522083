@@ -1,35 +1,53 @@
 import tkinter as tk
 import turtle
+import app
+import copy
 
 def solve():
+    t.clear()
     draw_axes()
-    draw_bezier()
-    num_iterations = num_iterations_entry.get()
-    num_points = num_points_entry.get()
-    list_of_point = list_of_point.get()
-    list_of_point = list_of_point.splitby(",")
-    list_of_point = list_of_point.splitby(" ")
+    num_of_iteration = num_iterations_entry.get()
+    num_of_point = num_points_entry.get()
+    list_of_point = list_of_point_entry.get("1.0", "end")
+    list_of_point = list_of_point.split(" ")
     try:
-        num_iterations = int(num_iterations)
-        num_points = int(num_points)
-        list_of_point = float(list_of_point)
-        if num_iterations <= 2 or num_points <= 2:
+        for i in range(len(list_of_point)):
+            point = list_of_point[i].split(",")  
+            list_of_point[i] = [float(xy) for xy in point] 
+        num_of_iteration = int(num_of_iteration)
+        num_of_point = int(num_of_point)
+        if num_of_iteration <= 2 or num_of_point <= 2:
+            raise ValueError
+        if num_of_point != len(list_of_point):
             raise ValueError
     except ValueError:
-        tk.messagebox.showwarning(title="Invalid input", message="Input invalid!")
-        return
+        tk.messagebox.showwarning(title="Invalid input", message="Invalid input!")
+    result_dnc = app.general_iterate(num_of_point, num_of_iteration, 0, list_of_point)
+    # result_dnc = app.take_result_point(result_dnc, num_of_point)
+    label3 = tk.Label(left_frame, text=result_dnc, bg="#2C2B30", fg="white", font=("Palatino", 10))
+    label1.grid(row=10, columnspan=2)
+    draw_bezier(result_dnc)
 
-def draw_bezier():
-    list_result = [[90,7], [0,8], [9,4000], [3,4]]
-    draw_curve(list_result)
-
-def draw_curve(points):
+def draw_bezier(points):
     t.penup()
-    t.goto(points[0][0], points[0][1])
-    t.pendown()
-    t.color("grey")
-    for i in range(1, len(points)):
-        t.goto(points[i][0], points[i][1])
+    max_value = max(max(point) for point in points)
+    scaling_points = copy.deepcopy(points)
+    divisor = 220 / max_value 
+    for point in scaling_points:
+        point[0] *= divisor
+        point[1] *= divisor
+    draw_curve(points, scaling_points)
+
+def draw_curve(points, scaling_points):
+    t.color("grey") 
+    for point in scaling_points:
+        t.goto(point[0], point[1])  
+        t.pendown()
+        t.dot(5)
+        if (point == scaling_points[0]):
+            t.write(f"({points[0][0]}, {points[0][1]})", align="right")
+        if (point == scaling_points[-1]):
+            t.write(f"({points[-1][0]}, {points[-1][1]})", align="right")
 
 def draw_axes():
     t.color("lightgrey")
@@ -41,6 +59,7 @@ def draw_axes():
     t.goto(0, -300)
     t.pendown()
     t.goto(0, 300)
+    t.penup()
 
 # Initialization
 root = tk.Tk()
@@ -83,6 +102,13 @@ list_of_point_entry.grid(row=3, column=0, columnspan=2, pady=5)
 # Solve button
 solve_button = tk.Button(left_frame, text="Solve", command=solve, bg="lightblue", font=("Palatino", 10), width=6, height=1)
 solve_button.grid(row=6, columnspan=2, pady=15)
+
+label1 = tk.Label(left_frame, text="Format input: x1,y1 x2,y2 x3,y3...", bg="#2C2B30", fg="white", font=("Palatino", 10))
+label2 = tk.Label(left_frame, text="Each point is split by a space", bg="#2C2B30", fg="white", font=("Palatino", 10))
+label3 = tk.Label(left_frame, text="Each x and y is split by a comma", bg="#2C2B30", fg="white", font=("Palatino", 10))
+label1.grid(row=7, columnspan=2)
+label2.grid(row=8, columnspan=2)
+label3.grid(row=9, columnspan=2)
 
 # Turtle canvas
 canvas_frame = tk.Frame(right_frame, width=600, height=600, bg="#2C2B30")
