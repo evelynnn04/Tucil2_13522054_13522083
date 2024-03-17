@@ -105,6 +105,16 @@ def general_iterate(n, iterate, count, list):
             result = connect(result,temp)
         return general_iterate(n,iterate,count+1,result)
 
+def one_iterate(n, count, list):
+    result = []
+    for i in range(2**count):
+        temp = []
+        for j in range(n):
+            temp.append(list[(n-1)*i+j])
+        temp = base_iterate(n,temp)
+        result = connect(result,temp)
+    return result
+
 def take_result_point(list, n):
     result = []
     for i in range(len(list)):
