@@ -70,14 +70,16 @@ def wide(i,list,f):
     temp.append(f)
     return temp
 
-def base_iterate(n, list):
+def base_iterate(n, list, listProses):
     if(n == 1):
+        listProses.append([list[len(list)//2]])
         return list
     else:
         temp = []
+        listProses.append(list)
         for i in range(n-1):
             temp.append(midPoint(list[i],list[i+1]))
-        return wide(list[0],base_iterate(n-1,temp),list[-1])
+        return wide(list[0],base_iterate(n-1,temp,listProses),list[-1])
 
 def connect(list1,list2):
     if(len(list1) == 0):
@@ -92,7 +94,7 @@ def connect1(list1,list2):
     else:
         return list1 + (list2)
 
-def general_iterate(n, iterate, count, list):
+def general_iterate(n, iterate, count, list, listProses):
     if(iterate == count):
         return list
     else:
@@ -101,9 +103,9 @@ def general_iterate(n, iterate, count, list):
             temp = []
             for j in range(n):
                 temp.append(list[(n-1)*i+j])
-            temp = base_iterate(n,temp)
+            temp = base_iterate(n,temp,listProses)
             result = connect(result,temp)
-        return general_iterate(n,iterate,count+1,result)
+        return general_iterate(n,iterate,count+1,result,listProses)
 
 def one_iterate(n, count, list):
     result = []
@@ -121,3 +123,11 @@ def take_result_point(list, n):
         if(i%(n-1) == 0):
             result.append(list[i])
     return result
+
+l = [[0,0],[4,4],[8,4],[12,0]]
+l2 = []
+l = general_iterate(4,2,0,l,l2)
+res = take_result_point(l,4)
+print(l)
+print(l2)
+
