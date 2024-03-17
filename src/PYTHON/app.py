@@ -1,4 +1,5 @@
 import time 
+import matplotlib.pyplot as plt
 
 # Input 
 def input_point(point_n, list_of_point, list_of_x, list_of_y):
@@ -124,10 +125,22 @@ def take_result_point(list, n):
             result.append(list[i])
     return result
 
+def makePic(awal,akhir):
+    x = [point[0] for point in akhir]
+    y = [point[1] for point in akhir]
+    plt.plot(x, y, marker='.')
+    px = [point[0] for point in awal]
+    py = [point[1] for point in awal]
+    plt.plot(px, py, marker='x')
+    plt.xlabel('X')
+    plt.ylabel('Y')
+    plt.title('Bezier')
+    plt.savefig('graph.png')
+
 l = [[0,0],[4,4],[8,4],[12,0]]
 l2 = []
-l = general_iterate(4,2,0,l,l2)
-res = take_result_point(l,4)
-print(l)
-print(l2)
+lmp = general_iterate(4,8,0,l,l2)
+res = take_result_point(lmp,4)
+makePic(l,res)
+print(len(res))
 
