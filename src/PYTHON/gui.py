@@ -3,9 +3,15 @@ import turtle
 import app
 import copy
 
+running = False
+
 def solve():
+    global running
+    if running:
+        return
+    running = True
+    solve_button.config(state=tk.DISABLED)
     t.clear()
-    draw_axes()
     num_of_iteration = num_iterations_entry.get()
     num_of_point = num_points_entry.get()
     list_of_point = list_of_point_entry.get("1.0", "end")
@@ -16,21 +22,24 @@ def solve():
             list_of_point[i] = [float(xy) for xy in point] 
         num_of_iteration = int(num_of_iteration)
         num_of_point = int(num_of_point)
-        if num_of_iteration <= 2 or num_of_point <= 2:
+        if num_of_iteration <= 0 or num_of_point <= 2:
             raise ValueError
         if num_of_point != len(list_of_point):
             raise ValueError
     except ValueError:
         tk.messagebox.showwarning(title="Invalid input", message="Invalid input!")
+        running = False
+        solve_button.config(state=tk.NORMAL)
+        return
+    draw_axes()
     result_dnc = app.general_iterate(num_of_point, num_of_iteration, 0, list_of_point)
-    # result_dnc = app.take_result_point(result_dnc, num_of_point)
-    label3 = tk.Label(left_frame, text=result_dnc, bg="#2C2B30", fg="white", font=("Palatino", 10))
-    label1.grid(row=10, columnspan=2)
     draw_bezier(result_dnc)
+    running = False
+    solve_button.config(state=tk.NORMAL)
 
 def draw_bezier(points):
     t.penup()
-    max_value = max(max(point) for point in points)
+    max_value = max(max(abs(coord) for coord in point) for point in points)
     scaling_points = copy.deepcopy(points)
     divisor = 220 / max_value 
     for point in scaling_points:
@@ -48,6 +57,7 @@ def draw_curve(points, scaling_points):
             t.write(f"({points[0][0]}, {points[0][1]})", align="right")
         if (point == scaling_points[-1]):
             t.write(f"({points[-1][0]}, {points[-1][1]})", align="right")
+    return
 
 def draw_axes():
     t.color("lightgrey")
