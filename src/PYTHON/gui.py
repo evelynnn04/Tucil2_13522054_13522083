@@ -32,31 +32,36 @@ def solve():
         solve_button.config(state=tk.NORMAL)
         return
     draw_axes()
-    result_dnc = app.general_iterate(num_of_point, num_of_iteration, 0, list_of_point)
-    draw_bezier(result_dnc)
+    list_step = [[[0, 0], [4, 4], [8, 4], [12, 0]], [[2.0, 2.0], [6.0, 4.0], [10.0, 2.0]], [[4.0, 3.0], [8.0, 3.0]], [[6.0, 3.0]], [[0, 0], [2.0, 2.0], [4.0, 3.0], [6.0, 3.0]], [[1.0, 1.0], [3.0, 2.5], [5.0, 3.0]], [[2.0, 1.75], [4.0, 2.75]], [[3.0, 2.25]], [[6.0, 3.0], [8.0, 3.0], [10.0, 2.0], [12, 0]], [[7.0, 3.0], [9.0, 2.5], [11.0, 1.0]], [[8.0, 2.75], [10.0, 1.75]], [[9.0, 2.25]]]
+    result_dnc = app.general_iterate(num_of_point, num_of_iteration, 0, list_of_point, list_step)
+    draw_bezier(list_step)
     running = False
     solve_button.config(state=tk.NORMAL)
 
 def draw_bezier(points):
+    points = [[[0, 0], [4, 4], [8, 4], [12, 0]], [[2.0, 2.0], [6.0, 4.0], [10.0, 2.0]], [[4.0, 3.0], [8.0, 3.0]], [[6.0, 3.0]], [[0, 0], [2.0, 2.0], [4.0, 3.0], [6.0, 3.0]], [[1.0, 1.0], [3.0, 2.5], [5.0, 3.0]], [[2.0, 1.75], [4.0, 2.75]], [[3.0, 2.25]], [[6.0, 3.0], [8.0, 3.0], [10.0, 2.0], [12, 0]], [[7.0, 3.0], [9.0, 2.5], [11.0, 1.0]], [[8.0, 2.75], [10.0, 1.75]], [[9.0, 2.25]]]
     t.penup()
-    max_value = max(max(abs(coord) for coord in point) for point in points)
+    max_value= float('-inf')
+    for sublist in points:
+        for point in sublist:
+            max_value= max(max_value, max(map(abs, point)))
     scaling_points = copy.deepcopy(points)
     divisor = 220 / max_value 
-    for point in scaling_points:
-        point[0] *= divisor
-        point[1] *= divisor
+    for sublist in points:
+        for point in sublist:
+            point[0] *= divisor
+            point[1] *= divisor
     draw_curve(points, scaling_points)
 
 def draw_curve(points, scaling_points):
-    t.color("grey") 
-    for point in scaling_points:
-        t.goto(point[0], point[1])  
+    t.color("grey")
+    for sublist in points:
+        t.penup()
+        t.goto(sublist[0][0], sublist[0][1])
         t.pendown()
-        t.dot(5)
-        if (point == scaling_points[0]):
-            t.write(f"({points[0][0]}, {points[0][1]})", align="right")
-        if (point == scaling_points[-1]):
-            t.write(f"({points[-1][0]}, {points[-1][1]})", align="right")
+        for point in sublist[1:]:
+            t.goto(point[0], point[1])
+        t.penup()
     return
 
 def draw_axes():
@@ -70,6 +75,7 @@ def draw_axes():
     t.pendown()
     t.goto(0, 300)
     t.penup()
+
 
 # Initialization
 root = tk.Tk()

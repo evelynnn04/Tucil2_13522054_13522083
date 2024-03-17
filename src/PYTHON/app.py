@@ -124,10 +124,4 @@ def take_result_point(list, n):
             result.append(list[i])
     return result
 
-l = [[0,0],[4,4],[8,4],[12,0]]
-l2 = []
-l = general_iterate(4,2,0,l,l2)
-res = take_result_point(l,4)
-print(l)
-print(l2)
 
