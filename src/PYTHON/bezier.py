@@ -1,22 +1,18 @@
-import time
-def midPoint(p1,p2):
-    return [(p1[0]+p2[0])/2,(p1[1]+p2[1])/2]
+import app
 
-def wide(i,list,f):
-    temp = list
-    temp.insert(0,i)
-    temp.append(f)
-    return temp
+# Inisialisasi 
+list_of_point = []
+list_of_x = []
+list_of_y = []
 
-def base_iterate(n, list):
-    if(n == 1):
-        return list
-    else:
-        temp = []
-        for i in range(n-1):
-            temp.append(midPoint(list[i],list[i+1]))
-        return wide(list[0],base_iterate(n-1,temp),list[-1])
+# Input
+print("Selamat datang di generator kurva berzier!")
+itr = app.input_value("iterasi")
+num_of_point = app.input_value("banyak pasangan titik")
+for i in range(num_of_point):
+    app.input_point(i, list_of_point, list_of_x, list_of_y)
 
+<<<<<<< HEAD
 def connect(list1,list2):
     if(len(list1) == 0):
         return list2
@@ -94,3 +90,15 @@ print()
 print(take_result_point(bez,4))
 print(len(bez))
 print(t)
+=======
+# Solve
+for point in list_of_point:
+    list_of_x.append(point[0])
+    list_of_y.append(point[1])
+result_dnc = app.general_iterate(num_of_point, itr, 0, list_of_point)
+result_x = app.brute_force_bezier (num_of_point, list_of_x, itr)
+result_y = app.brute_force_bezier (num_of_point, list_of_y, itr)
+result_bf = app.merge_xy(result_x, result_y)
+print(result_dnc)
+print(result_bf)
+>>>>>>> a90d25875a8ec9d1f15e77b38df1e6080536cb4d

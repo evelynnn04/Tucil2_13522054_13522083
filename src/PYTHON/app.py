@@ -1,7 +1,4 @@
-from collections import namedtuple
-
-# Struct
-Point = namedtuple('Point', ['x', 'y'])
+import time 
 
 # Input 
 def input_point(point_n, list_of_point, list_of_x, list_of_y):
@@ -11,7 +8,7 @@ def input_point(point_n, list_of_point, list_of_x, list_of_y):
             px, py = p.split(" ")
             px = float(px)
             py = float(py)
-            list_of_point.append(Point(px, py))
+            list_of_point.append([px, py])
             list_of_x.append(px)
             list_of_y.append(py)
             break
@@ -42,6 +39,7 @@ def pascals_triangle(num_rows):
 
 # Brute force 
 def brute_force_bezier (num_of_point, list_of_point, itr):
+    start = time.time()
     list_result = []
     idx = 0
     offset = 1 / (2**itr)
@@ -49,16 +47,67 @@ def brute_force_bezier (num_of_point, list_of_point, itr):
     while idx <= 1:
         value = 0
         for i in range (len(constant)):
-            # print(f"{constant[i]} * ({(1-idx)}**{(num_of_point-i-1)}) * {list_of_point[i]} * {(idx**i)}")
             value += constant[i] * ((1-idx)**(num_of_point-i-1)) * list_of_point[i] * (idx**i)
-            # print("hasil = ", f"{constant[i] * ((1-idx)**(num_of_point-i-1)) * list_of_point[i] * (idx**i)}")
         list_result.append(value)
         idx += offset
+    end = time.time()
+    print("Runtime: ", (end-start) * 10**3, "ms")
     return list_result
 
 # Gabungkan x dan y 
 def merge_xy(list_of_x, list_of_y):
     list_result = []
     for i in range(len(list_of_x)):
-        list_result.append(Point(list_of_x[i], list_of_y[i]))
+        list_result.append([list_of_x[i], list_of_y[i]])
     return list_result
+
+def midPoint(p1,p2):
+    return [(p1[0]+p2[0])/2,(p1[1]+p2[1])/2]
+
+def wide(i,list,f):
+    temp = list
+    temp.insert(0,i)
+    temp.append(f)
+    return temp
+
+def base_iterate(n, list):
+    if(n == 1):
+        return list
+    else:
+        temp = []
+        for i in range(n-1):
+            temp.append(midPoint(list[i],list[i+1]))
+        return wide(list[0],base_iterate(n-1,temp),list[-1])
+
+def connect(list1,list2):
+    if(len(list1) == 0):
+        return list2
+    else:
+        list2.pop(0)
+        return list1 + (list2)
+
+def connect1(list1,list2):
+    if(len(list1) == 0):
+        return list2
+    else:
+        return list1 + (list2)
+
+def general_iterate(n, iterate, count, list):
+    if(iterate == count):
+        return list
+    else:
+        result = []
+        for i in range(2**count):
+            temp = []
+            for j in range(n):
+                temp.append(list[(n-1)*i+j])
+            temp = base_iterate(n,temp)
+            result = connect(result,temp)
+        return general_iterate(n,iterate,count+1,result)
+
+def take_result_point(list, n):
+    result = []
+    for i in range(len(list)):
+        if(i%(n-1) == 0):
+            result.append(list[i])
+    return result
