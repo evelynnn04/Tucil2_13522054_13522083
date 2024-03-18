@@ -78,7 +78,7 @@ def draw_bezier(points):
     draw_curve(points, scaling_points)
 
 def draw_curve(points, scaling_points):
-    t.color("lightblue")
+    t.color("#219EBC")
     for sublist in scaling_points:
         t.penup()
         t.goto(sublist[0][0], sublist[0][1])
@@ -103,9 +103,15 @@ def draw_curve_final(points, scaling_points):
     for point in scaling_points:
         t.goto(point[0], point[1])
         if (point == scaling_points[0]):
-            t.write(f"({points[0][0]}, {points[0][1]})", align="right")
+            if (points[0][0] < 0):
+                t.write(f"({points[0][0]}, {points[0][1]})", align="left")
+            else:
+                t.write(f"({points[0][0]}, {points[0][1]})", align="right")
         if (point == scaling_points[-1]):
-            t.write(f"({points[-1][0]}, {points[-1][1]})", align="right")
+            if (points[-1][0] < 0):
+                t.write(f"({points[-1][0]}, {points[-1][1]})", align="left")
+            else:
+                t.write(f"({points[-1][0]}, {points[-1][1]})", align="right")
 
 def draw_axes(multiplier):
     t.color("lightgrey")

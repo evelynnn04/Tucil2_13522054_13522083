@@ -1,4 +1,3 @@
-import time 
 import matplotlib.pyplot as plt
 
 # Input 
@@ -16,12 +15,12 @@ def input_point(point_n, list_of_point, list_of_x, list_of_y):
         except ValueError:
             print(f"Input invalid!")
 
-def input_value(value_name):
+def input_value(value_name, min):
     while True:
         value = input(f"Silakan masukkan banyaknya {value_name}: ")
         try:
             value = int(value)
-            if value < 1:
+            if value < min:
                 raise ValueError
             break
         except ValueError:
@@ -40,7 +39,6 @@ def pascals_triangle(num_rows):
 
 # Brute force 
 def brute_force_bezier (num_of_point, list_of_point, itr):
-    start = time.time()
     list_result = []
     idx = 0
     offset = 1 / (2**itr)
@@ -51,8 +49,20 @@ def brute_force_bezier (num_of_point, list_of_point, itr):
             value += constant[i] * ((1-idx)**(num_of_point-i-1)) * list_of_point[i] * (idx**i)
         list_result.append(value)
         idx += offset
-    end = time.time()
-    print("Runtime: ", (end-start) * 10**3, "ms")
+    return list_result
+
+# Brute force 3 titik
+def brute_force_3titik (list_of_point, itr):
+    list_result = []
+    idx = 0
+    offset = 1 / (2**itr)
+    constant = [1, 2, 1]
+    while idx <= 1:
+        value = 0
+        for i in range (3):
+            value += constant[i] * ((1-idx)**(2-i)) * list_of_point[i] * (idx**i)
+        list_result.append(value)
+        idx += offset
     return list_result
 
 # Gabungkan x dan y 
@@ -136,11 +146,3 @@ def makePic(awal,akhir):
     plt.ylabel('Y')
     plt.title('Bezier')
     plt.savefig('graph.png')
-
-l = [[0,0],[4,4],[8,4],[12,0]]
-l2 = []
-lmp = general_iterate(4,8,0,l,l2)
-res = take_result_point(lmp,4)
-makePic(l,res)
-print(len(res))
-
