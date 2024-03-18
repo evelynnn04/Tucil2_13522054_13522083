@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import os
 
 # Input 
 def input_point(point_n, list_of_point, list_of_x, list_of_y):
@@ -21,6 +22,18 @@ def input_value(value_name, min):
         try:
             value = int(value)
             if value < min:
+                raise ValueError
+            break
+        except ValueError:
+            print("Input invalid!")
+    return value
+
+def input_value_1or2():
+    while True:
+        value = input(f"Silakan masukkan pilihan: ")
+        try:
+            value = int(value)
+            if value < 1 or value > 2:
                 raise ValueError
             break
         except ValueError:
@@ -135,14 +148,19 @@ def take_result_point(list, n):
             result.append(list[i])
     return result
 
-def makePic(awal,akhir):
-    x = [point[0] for point in akhir]
-    y = [point[1] for point in akhir]
-    plt.plot(x, y, marker='.')
-    px = [point[0] for point in awal]
-    py = [point[1] for point in awal]
-    plt.plot(px, py, marker='x')
+def makePic(step, final):
+    file_name = input("Silakan masukkan nama file gambar: ")
+    while (os.path.exists(file_name  + ".png")):
+        file_name = input("File sudah ada! Silakan masukkan nama file gambar: ")
+    for sublist in step:
+        x = [point[0] for point in sublist]
+        y = [point[1] for point in sublist]
+        plt.plot(x, y, marker='.')
+    px = [point[0] for point in final]
+    py = [point[1] for point in final]
+    plt.plot(px, py, marker='.')
     plt.xlabel('X')
     plt.ylabel('Y')
     plt.title('Bezier')
-    plt.savefig('graph.png')
+    plt.savefig(file_name)
+

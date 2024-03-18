@@ -2,6 +2,7 @@ import tkinter as tk
 import turtle
 import app
 import copy
+import time 
 
 running = False
 global multiplier
@@ -34,11 +35,16 @@ def solve():
         solve_button.config(state=tk.NORMAL)
         return
     list_step = []
+    start = time.time()
     result_dnc = app.general_iterate(num_of_point, num_of_iteration, 0, list_of_point, list_step)
     result_dnc = app.take_result_point(result_dnc, num_of_point)
+    end = time.time()
+    runtime = (end - start)*1000
     draw_bezier(list_step)
     draw_bezier_final(result_dnc)
-    tk.messagebox.showinfo(title="Points info", message=result_dnc)
+    # result_dnc_str = '\n'.join(result_dnc)
+    message = f"{result_dnc}\nRuntime: {runtime} ms"
+    tk.messagebox.showinfo(title="Points info", message=message)
     running = False
     solve_button.config(state=tk.NORMAL)
 
