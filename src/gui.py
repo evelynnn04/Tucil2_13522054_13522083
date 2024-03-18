@@ -4,6 +4,7 @@ import app
 import copy
 
 running = False
+global multiplier
 
 def solve():
     global running
@@ -11,6 +12,7 @@ def solve():
         return
     running = True
     solve_button.config(state=tk.DISABLED)
+    pass
     t.clear()
     num_of_iteration = num_iterations_entry.get()
     num_of_point = num_points_entry.get()
@@ -31,31 +33,53 @@ def solve():
         running = False
         solve_button.config(state=tk.NORMAL)
         return
-    draw_axes()
-    list_step = [[[0, 0], [4, 4], [8, 4], [12, 0]], [[2.0, 2.0], [6.0, 4.0], [10.0, 2.0]], [[4.0, 3.0], [8.0, 3.0]], [[6.0, 3.0]], [[0, 0], [2.0, 2.0], [4.0, 3.0], [6.0, 3.0]], [[1.0, 1.0], [3.0, 2.5], [5.0, 3.0]], [[2.0, 1.75], [4.0, 2.75]], [[3.0, 2.25]], [[6.0, 3.0], [8.0, 3.0], [10.0, 2.0], [12, 0]], [[7.0, 3.0], [9.0, 2.5], [11.0, 1.0]], [[8.0, 2.75], [10.0, 1.75]], [[9.0, 2.25]]]
+    list_step = []
     result_dnc = app.general_iterate(num_of_point, num_of_iteration, 0, list_of_point, list_step)
+    result_dnc = app.take_result_point(result_dnc, num_of_point)
     draw_bezier(list_step)
+    draw_bezier_final(result_dnc)
+    tk.messagebox.showinfo(title="Points info", message=result_dnc)
     running = False
     solve_button.config(state=tk.NORMAL)
 
+def add_scrollbar(content):
+    scrollbar_frame = tk.Frame(left_frame)
+    scrollbar_frame.grid(row=7, column=0, columnspan=2, rowspan=3, pady=5)
+    scrollbar = tk.Scrollbar(scrollbar_frame, orient="vertical", bg="white", fg="black", font=("Palatino", 10))
+    scrollbar.grid(row=0, column=1, sticky="ns")
+    text_widget = tk.Text(scrollbar_frame, width=25, height=5, yscrollcommand=scrollbar.set)
+    text_widget.grid(row=0, column=0)
+    scrollbar.config(command=text_widget.yview)
+    for item in content:
+        text_widget.insert(tk.END, item + "\n")
+
 def draw_bezier(points):
-    points = [[[0, 0], [4, 4], [8, 4], [12, 0]], [[2.0, 2.0], [6.0, 4.0], [10.0, 2.0]], [[4.0, 3.0], [8.0, 3.0]], [[6.0, 3.0]], [[0, 0], [2.0, 2.0], [4.0, 3.0], [6.0, 3.0]], [[1.0, 1.0], [3.0, 2.5], [5.0, 3.0]], [[2.0, 1.75], [4.0, 2.75]], [[3.0, 2.25]], [[6.0, 3.0], [8.0, 3.0], [10.0, 2.0], [12, 0]], [[7.0, 3.0], [9.0, 2.5], [11.0, 1.0]], [[8.0, 2.75], [10.0, 1.75]], [[9.0, 2.25]]]
     t.penup()
-    max_value= float('-inf')
+    max_value = 0
     for sublist in points:
         for point in sublist:
-            max_value= max(max_value, max(map(abs, point)))
-    scaling_points = copy.deepcopy(points)
-    divisor = 220 / max_value 
-    for sublist in points:
-        for point in sublist:
-            point[0] *= divisor
-            point[1] *= divisor
+            for xy in point:
+                max_value= max(max_value, abs(xy))
+    global multiplier 
+    multiplier = 220 / max_value
+    if (multiplier > 1):
+        multiplier = 220 // max_value
+    
+    scaling_points = []
+    for sublist1 in points:
+        multiplied_sublist1 = []
+        for sublist2 in sublist1:
+            multiplied_sublist2 = []
+            for value in sublist2:
+                multiplied_sublist2.append(value * multiplier)
+            multiplied_sublist1.append(multiplied_sublist2)
+        scaling_points.append(multiplied_sublist1)
+    draw_axes(multiplier)
     draw_curve(points, scaling_points)
 
 def draw_curve(points, scaling_points):
-    t.color("grey")
-    for sublist in points:
+    t.color("lightblue")
+    for sublist in scaling_points:
         t.penup()
         t.goto(sublist[0][0], sublist[0][1])
         t.pendown()
@@ -64,18 +88,58 @@ def draw_curve(points, scaling_points):
         t.penup()
     return
 
-def draw_axes():
+def draw_bezier_final(points):
+    scaling_points = copy.deepcopy(points)
+    for i in range(len(points)):
+        scaling_points[i][0] *= multiplier
+        scaling_points[i][1] *= multiplier
+    draw_curve_final(points, scaling_points)
+
+def draw_curve_final(points, scaling_points):
+    t.penup()
+    t.goto(scaling_points[0][0], scaling_points[0][1])
+    t.color("black")
+    t.pendown()
+    for point in scaling_points:
+        t.goto(point[0], point[1])
+        if (point == scaling_points[0]):
+            t.write(f"({points[0][0]}, {points[0][1]})", align="right")
+        if (point == scaling_points[-1]):
+            t.write(f"({points[-1][0]}, {points[-1][1]})", align="right")
+
+def draw_axes(multiplier):
     t.color("lightgrey")
     t.penup()
-    t.goto(-300, 0)
+    t.goto(-canvas.winfo_width() / 2, 0)
     t.pendown()
-    t.goto(300, 0)
+    t.goto(canvas.winfo_width() / 2, 0)
     t.penup()
-    t.goto(0, -300)
+    t.goto(0, -canvas.winfo_height() / 2)
     t.pendown()
-    t.goto(0, 300)
+    t.goto(0, canvas.winfo_height() / 2)
     t.penup()
 
+    x = -200
+    while x < 201:
+        t.goto(x, -5)
+        t.pendown()
+        t.goto(x, 5)
+        t.penup()
+        t.goto(x, -20)
+        t.write(str(round(x / multiplier, 1)), align="center")  
+        x += 50
+
+    y = -200
+    while y < 201:
+        t.goto(-5, y)
+        t.pendown()
+        t.goto(5, y)
+        t.penup()
+        t.goto(-20, y)
+        t.write(str(round((y / multiplier), 1)), align="right") 
+        y += 50
+
+    t.penup()
 
 # Initialization
 root = tk.Tk()
@@ -129,7 +193,7 @@ label3.grid(row=9, columnspan=2)
 # Turtle canvas
 canvas_frame = tk.Frame(right_frame, width=600, height=600, bg="#2C2B30")
 canvas_frame.pack(padx=10, pady=10)
-canvas = tk.Canvas(canvas_frame, width=600, height=600, bg="#2C2B30")
+canvas = tk.Canvas(canvas_frame, width=500, height=500, bg="#2C2B30")
 canvas.pack()
 screen = turtle.TurtleScreen(canvas)
 t = turtle.RawTurtle(screen)
