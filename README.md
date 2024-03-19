@@ -17,6 +17,7 @@ Algortima yang digunakan adalah algortima Brute Force (sebagai pembanding) dan a
 
 ### Algoritma Brute Force
 
+
 ### Algoritma Divide & Conquer
 
 Pada algoritma Divide and Conquer, antar titik-titik kontrol akan ditarik garis.
@@ -50,18 +51,46 @@ Berikut ini tools yang diperlukan untuk menjalankan program:
             sudo apt install python3 python3-pip ipython3 
             ```
 - Tkinter
-    ```
-    pip install tkinter
-    ```
+    - Untuk windows:
+        ```
+        pip install tkinter
+        ```
+    - Untuk WSL:
+        ```
+        sudo apt install python3-tk
+        ```
 - Matplotlib
-    ```
-    pip install matplotlib
-    ```
+    - Untuk windows:
+        ```
+        pip install matplotlib
+        ```
+    - Untuk WSL:
+        ```
+        sudo apt-get install python3-matplotlib 
+        ```
+- Turtle (sebenarnya tergabung dalam Tkinter)
+    - Untuk windows:
+        ```
+        pip install turtle
+        ```
+    - Untuk WSL:
+        ```
+        sudo pip3 install PythonTurtle
+        ```
 
 #### Menjalankan program
 
 - Menggunakan CLI
-
+    1. Buka terminal
+    2. Pindah ke directory tempat bezier.py berada
+    3. Jalankan command ini pada terminal
+        ```
+        py bezier.py
+        ```
+        atau
+        ```
+        python bezier.py
+        ```
 - Menggunakan GUI
     1. Buka terminal
     2. Pindah ke directory tempat gui.py berada

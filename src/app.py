@@ -112,11 +112,11 @@ def connect(list1,list2):
         list2.pop(0)
         return list1 + (list2)
 
-def connect1(list1,list2):
-    if(len(list1) == 0):
-        return list2
-    else:
-        return list1 + (list2)
+# def connect1(list1,list2):
+#     if(len(list1) == 0):
+#         return list2
+#     else:
+#         return list1 + (list2)
 
 def general_iterate(n, iterate, count, list, listProses):
     if(iterate == count):
