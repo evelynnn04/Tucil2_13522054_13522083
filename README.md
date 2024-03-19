@@ -17,11 +17,18 @@ Algortima yang digunakan adalah algortima Brute Force (sebagai pembanding) dan a
 
 ### Algoritma Brute Force
 
+Pada algoritma Brute Force, koordinat x dan y dicari dengan menggunakan suatu rumus umum.
+Rumus umumnya:
+$$
+\mathbf{B}(t)=\sum_{i=0}^{n}\binom{n}{i}(i-t)^{n-i}t^i\mathbf{P}_i
+$$
+dengan B adalah titik koordinat hasil, P titik kontrol, n adalah banyak titik kontrol, i adalah pencacah titik, 
+dan t adalah rasio jarak titik awal ke titik tengah dengan jarak titik awal ke titik selanjutnya.
 
 ### Algoritma Divide & Conquer
 
 Pada algoritma Divide and Conquer, antar titik-titik kontrol akan ditarik garis.
-Dari setiap garis terbentuk, titik tengah garis akan menjadi titik kontrol baru.
+Dari setiap garis terbentuk, titik tengah (tepat membagi 2 gari) garis akan menjadi titik kontrol baru.
 Proses ini akan berulang hingga terbentuk 1 titik kontrol tunggal.
 Titik-titik kontrol baru tersebut akan digunakan pada proses iterasi selanjutnya.
 
